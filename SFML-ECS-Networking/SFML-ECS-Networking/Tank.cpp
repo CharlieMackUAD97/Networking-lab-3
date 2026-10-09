@@ -54,7 +54,7 @@ void Tank::Update(float dt)
 
 	// Apply new rotation to tank body and barrel.
 	body.setRotation(bodyRotation);
-	barrel.setRotation(bodyRotation);
+	barrel.setRotation(barrelRotation + bodyRotation);
 
 	// Apply new position to tank body and barrel.
 	body.setPosition(position);

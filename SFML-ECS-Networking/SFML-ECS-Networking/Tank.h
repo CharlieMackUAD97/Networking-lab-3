@@ -12,7 +12,7 @@ public:
 	// FIXME: this is not the cleanest solution as you can make a typo which will cause
 	// texture to fail to load. Ideally should use enum/map or similar solution.
 	Tank(std::string colour);
-
+	int TankId = 0;
 	void Update(float dt);
 	const void Render(sf::RenderWindow &window);
 

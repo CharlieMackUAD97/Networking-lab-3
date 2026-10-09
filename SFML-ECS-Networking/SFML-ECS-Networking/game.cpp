@@ -35,8 +35,12 @@ void Game::HandleEvents(const std::optional<sf::Event> event)
 			tank.isMoving.left = false;
 			tank.isMoving.right = true;
 		}
-		if (keyPressed->scancode == sf::Keyboard::Scancode::D) {
-
+		if (keyPressed->scancode == sf::Keyboard::Scancode::Q) {
+			tank.barrelRotation += sf::degrees(2);
+		}
+		if (keyPressed->scancode == sf::Keyboard::Scancode::E)
+		{
+			tank.barrelRotation += sf::degrees(-2);
 		}
 	}
 
@@ -56,25 +60,39 @@ void Game::HandleEvents(const std::optional<sf::Event> event)
 void Game::Update(float dt)
 {
 	tank.Update(dt);
+	tank2.Update(dt);
 }
 
 void Game::NetworkUpdate(float dt, TankMessage data) {
 	// Force position update from network data.
 	tank.position = { data.x, data.y };
+	tank.barrelRotation = sf::degrees(data.barrelAngle);
+	tank.bodyRotation = sf::degrees(data.tankAngle);
 	// Update tank with new position.
 	// NOTE: This assumets no inputs were detected and so the tank will only move according to 
 	// network updates. This is not ideal and prone to unexpected behaviour if game is extended
 	// to be fully multiplayer. 
 	tank.Update(dt);
+
+	// Force position update from network data.
+	tank2.position = { data.x, data.y };
+	tank2.barrelRotation = sf::degrees(data.barrelAngle);
+	tank2.bodyRotation = sf::degrees(data.tankAngle);
+	// Update tank with new position.
+	// NOTE: This assumets no inputs were detected and so the tank will only move according to 
+	// network updates. This is not ideal and prone to unexpected behaviour if game is extended
+	// to be fully multiplayer. 
+	tank2.Update(dt);
 }
 
 void Game::Render(sf::RenderWindow& window)
 {
 	window.draw(background);
 	tank.Render(window);
+	tank2.Render(window);
 }
 
 TankMessage Game::GetNetworkUpdate()
 {
-	return { tank.position.x, tank.position.y };
+	return { tank.position.x, tank.position.y ,tank.barrelRotation.asDegrees(),tank.bodyRotation.asDegrees()};
 }

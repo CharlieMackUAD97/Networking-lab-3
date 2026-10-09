@@ -5,4 +5,7 @@
 struct TankMessage {
 	// The coordinates of the tank within the game world.
 	float x, y;
+	float barrelAngle;
+	float tankAngle;
+	std::string colour;
 };
